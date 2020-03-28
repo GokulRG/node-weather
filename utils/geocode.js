@@ -6,19 +6,21 @@ const getLatLongForGivenLocation = (addressString, callback) => {
 		addressString
 	)}.json?access_token=pk.eyJ1IjoiZ29rdWxyZyIsImEiOiJjazg4djVhZGowMGVjM25wY2ZhNDV5N2x5In0.38lseRcmwoBd2hUoHiHZHA&limit=1`;
 
-	request(geolocationURL, { json: true }, (error, response) => {
+	request(geolocationURL, { json: true }, (error, {body}) => {
 		if (error) {
 			callback({ errors: [ 'Unable to fetch location information' ], results: null });
 			return;
-		}
+        }
+        
+        const { features } = body;
 
-		if (response.body.features.length === 0) {
+		if (features.length === 0) {
 			callback({ errors: [ 'Location Information Not Found' ], results: null });
 			return;
 		}
 
 		callback({
-			results: { placeName: response.body.features[0].place_name ,latitude: response.body.features[0].center[1], longitude: response.body.features[0].center[0] },
+			results: { placeName: features[0].place_name ,latitude: features[0].center[1], longitude: features[0].center[0] },
 			errors: null
 		});
 	});

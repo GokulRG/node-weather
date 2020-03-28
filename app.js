@@ -7,22 +7,22 @@ const getTemperatureForAGivenLocation = (locationName) => {
         console.log('Please provide a valid location name as an argument');
         return;
     }
-    
-	getLatLongForGivenLocation(locationName, (response) => {
-		if (response.errors != null) {
-			console.log(response.errors[0]);
+
+	getLatLongForGivenLocation(locationName, ({error:latLongErrors, results:latLongResults}) => {
+		if (latLongErrors != null) {
+			console.log(latLongErrors[0]);
 			return;
 		}
 
-		const { placeName, latitude, longitude } = response.results;
+		const { placeName, latitude, longitude } = latLongResults;
 
-		getWeatherInformationForAGivenLatLong(latitude, longitude, (response) => {
-			if (response.errors != null) {
-				console.log(response.errors[0]);
+		getWeatherInformationForAGivenLatLong(latitude, longitude, ({error:weatherErrors, results:weatherResults}) => {
+			if (weatherErrors != null) {
+				console.log(weatherErrors[0]);
 				return;
 			}
 
-			const { summary, temperature, precipProbability } = response.results;
+			const { summary, temperature, precipProbability } = weatherResults;
 
             console.log(placeName);
 			console.log(
